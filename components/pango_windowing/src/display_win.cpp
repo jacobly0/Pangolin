@@ -207,7 +207,7 @@ void WinWindow::SetupPalette(HDC hDC)
 
 WinWindow::WinWindow(
     const std::string& window_title, int width, int height
-) : hWnd(0), bIsFullscreen(false)
+) : hWnd(0), bIsFullscreen(false), bNeedsInit(true)
 {
     const HMODULE hCurrentInst = GetModuleHandleA(nullptr);
     if(hCurrentInst==NULL) {
@@ -255,7 +255,7 @@ void WinWindow::RegisterThisClass(HMODULE hCurrentInst)
     wndClass.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
     wndClass.lpszMenuName = NULL;
     wndClass.lpszClassName = className;
-    if(!RegisterClassA(&wndClass)) {
+    if(!RegisterClassA(&wndClass) && GetLastError() != ERROR_CLASS_ALREADY_EXISTS) {
         std::cerr << "RegisterClass() failed" << std::endl;
         CheckWGLDieOnError();
     }
@@ -571,12 +571,11 @@ void WinWindow::SwapBuffers()
 
 void WinWindow::ProcessEvents()
 {
-    static bool needs_init = true;
-    if(needs_init) {
+    if(bNeedsInit) {
         RECT cRect;
         GetClientRect(hWnd, &cRect);
         ResizeSignal(WindowResizeEvent({cRect.right, cRect.bottom}));
-        needs_init = false;
+        bNeedsInit = false;
     }
 
     MSG msg;

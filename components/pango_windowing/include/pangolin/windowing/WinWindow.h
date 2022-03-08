@@ -84,6 +84,7 @@ private:
     bool bIsFullscreen;
     RECT cWindowedRect;
     float afLastMousePos[2];
+    bool bNeedsInit;
 };
 
 }
