@@ -46,7 +46,7 @@ install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/include"
 
 find_package(Threads QUIET)
 if(Threads_FOUND)
-    target_link_libraries(${COMPONENT} PUBLIC Threads::Threads)
+    target_link_libraries(${COMPONENT} PUBLIC ${CMAKE_THREAD_LIBS_INIT})
 endif()
 
 ## Generate symbol export helper header on MSVC
