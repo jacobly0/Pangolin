@@ -33,18 +33,12 @@ install(DIRECTORY "${CMAKE_CURRENT_LIST_DIR}/include"
 
 if(EMSCRIPTEN)
     target_compile_definitions(${COMPONENT} PUBLIC HAVE_GLES HAVE_GLES_2)
-    target_sources( ${COMPONENT} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src/compat/gl2engine.cpp)
+    target_sources(${COMPONENT} PRIVATE ${CMAKE_CURRENT_LIST_DIR}/src/compat/gl2engine.cpp)
 else()
     if(_LINUX_)
         set(OpenGL_GL_PREFERENCE "GLVND")
     endif()
     find_package(OpenGL REQUIRED QUIET)
     find_package(GLEW REQUIRED QUIET)
-    target_include_directories( ${COMPONENT} PUBLIC
-        $<BUILD_INTERFACE:${OPENGL_INCLUDE_DIR}>
-        $<BUILD_INTERFACE:${GLEW_INCLUDE_DIR}>
-    )
-    target_link_libraries( ${COMPONENT} PUBLIC
-        ${GLEW_LIBRARY} ${OPENGL_LIBRARIES}
-    )
+    target_link_libraries(${COMPONENT} PUBLIC GLEW::GLEW OpenGL::GL)
 endif()
