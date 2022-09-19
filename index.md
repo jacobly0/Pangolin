@@ -66,24 +66,27 @@ Pangolin does it's best to build something with what it gets, so dependencies wh
 ## Building ##
 
 Pangolin uses the CMake portable pre-build tool. To checkout and build pangolin in the
-directory 'build', execute the following at a shell (or the equivelent using a GUI):
+directory 'build', execute the following at a shell (or the equivalent using a GUI):
 
 ```bash
 # Get Pangolin
 cd ~/your_fav_code_directory
 git clone --recursive https://github.com/stevenlovegrove/Pangolin.git
-cd Pangolin 
+cd Pangolin
 
 # Install dependencies (as described above, or your preferred method)
 ./scripts/install_prerequisites.sh recommended
 
 # Configure and build
-mkdir build && cd build
-cmake ..
-cmake --build .
+cmake -B build
+cmake --build build
+
+# with Ninja for faster builds (sudo apt install ninja-build)
+cmake -B build -GNinja
+cmake --build build
 
 # GIVEME THE PYTHON STUFF!!!! (Check the output to verify selected python version)
-cmake --build . -t pypangolin_pip_install
+cmake --build build -t pypangolin_pip_install
 
 # Run me some tests! (Requires Catch2 which must be manually installed on Ubuntu.)
 ctest
@@ -157,7 +160,7 @@ VideoViewer uvc:[size=640x480]///dev/video0
 VideoViewer flip://debayer:[tile=rggb,method=downsample]//file://~/somefile.pango
 ```
 
-Notice that for video, some modules support chaining to construct a simple filter graph. 
+Notice that for video, some modules support chaining to construct a simple filter graph.
 
 #### Window URI's
 
@@ -184,7 +187,7 @@ PANGOLIN_WINDOW_URI="default:[default_font_size=20]//" ./some_pangolin_app
 PANGOLIN_WINDOW_URI="default:[default_font=my_awesome_font.ttf,default_font_size=20]//" ./some_pangolin_app
 ```
 
-To use Pangolin in your applications whilst being conciencious of chaning fonts, you can query how long fonts or text are with:
+To use Pangolin in your applications whilst being conscientious of changing fonts, you can query how long fonts or text are with:
 
 ```C++
 #include <pangolin/display/default_font.h>
@@ -204,7 +207,7 @@ int func()
 
 Emscripten is a neat c++ compiler which can output javascript executable code. That's right, your Pangolin programs can run on the web, too!
 
-Follow Emscriptens instructions to install the SDK (summerized below):
+Follow Emscriptens instructions to install the SDK (summarized below):
 
 ```bash
 mkdir ~/tools && cd ~/tools
